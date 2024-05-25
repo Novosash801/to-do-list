@@ -1,0 +1,19 @@
+@import './reset.scss';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&family=Roboto:wght@400;500&display=swap');
+
+
+* {
+    font-family: 'Roboto', sans-serif;
+    list-style: none;
+    outline: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #3F72AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
