@@ -18,7 +18,12 @@ const store = create<ToDoStore>((set, get) => ({
     tasks: [
         {
             id: 'aboba',
-            title: 'My default task',
+            title: 'My first task',
+            createdAt: new Date()
+        },
+        {
+            id: 'beebee',
+            title: 'My second task',
             createdAt: new Date()
         },
     ],

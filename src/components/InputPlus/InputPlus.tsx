@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import styles from './input.module.scss';
+import styles from './inputplus.module.scss';
 
 import plusSvg from '../../assets/icons/plus.svg';
 

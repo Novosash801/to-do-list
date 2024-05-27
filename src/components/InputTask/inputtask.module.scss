@@ -1,0 +1,44 @@
+.inputTask {
+    display: grid;
+    grid-template-columns: 1fr 50px 50px;
+    // gap: 10px;
+    margin-bottom: 15px;
+    background: #DBE2EF;
+    border-radius: 5px;
+    padding-right: 10px;
+    .inputTaskLabel {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        padding: 12px 15px;
+        cursor: pointer;
+        .inputTaskCheckbox {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+        .inputTaskTitle {
+            padding: 5px
+        }
+        .inputTaskTitleEdit {
+            font-size: 18px;
+            border: none;
+            padding: 5px;
+            background: none;
+            box-shadow: 0 4px 0 -3px #3f72af;
+        }
+    }
+    .inputTaskEdit, .inputTaskRemove, .inputTaskSave {
+        display: block;
+        height: 100%;
+        border: none;
+        background: none;
+        cursor: pointer;
+        padding: 0;
+        &:hover {
+            opacity: 0.5;
+            transition: all 0.4s;
+        }
+    }
+    
+}
