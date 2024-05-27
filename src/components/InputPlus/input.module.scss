@@ -1,0 +1,29 @@
+.inputPlus {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 45px;
+
+}
+
+.inputPlusValue {
+    min-height: 30px;
+    color: #000000;
+    background: #DBE2EF ;
+    border: 1px solid #b1b1b1;
+    padding: 10px;
+    font-size: 20px ;
+    font-weight: 300;
+}
+
+.inputPlusButton {
+    border: none;
+    border-radius: 0;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+    background: #3f72af;
+    &:hover {
+        opacity: 0.7;
+        transition: 0.8s all;
+    }
+}

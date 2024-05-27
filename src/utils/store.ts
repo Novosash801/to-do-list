@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+import generatedId from './helpers';
 interface Task {
     id: string;
     title: string;
@@ -14,22 +14,52 @@ interface ToDoStore {
 
 }
 
-export const store = create<ToDoStore>((set, get) => ({
+const store = create<ToDoStore>((set, get) => ({
     tasks: [
         {
-            id: 'abds',
-            title: 'Buy milk',
+            id: 'aboba',
+            title: 'My default task',
             createdAt: new Date()
-        }
-       
+        },
     ],
-    addTask: (title) => {
 
+    addTask: (title) => {
         const { tasks } = get();
-        cos
-        console.log(tasks);
+        const newTask = {
+            id: generatedId(),
+            title,
+            createdAt: new Date()
+        
+        };
+
+        set({ 
+            tasks: [...tasks, newTask] 
+        });
     },
-    updateTask: (id, title) => {},
-    removeTask: (id) => {},
+
+    updateTask: (id: string, title: string) => {
+        const { tasks } = get();
+        const updatedTasks = tasks.map((task) => {
+            if (task.id === id) {
+                return {
+                    ...task,
+                    title: task.id === id? title : task.title,
+                };
+            }
+            return task;
+        });
+
+        set({ tasks: updatedTasks });
+    
+    },
+    removeTask: (id: string) => {
+        const { tasks } = get();
+        const updatedTasks = tasks.filter((task) => task.id !== id);
+
+        set({ tasks: updatedTasks });
+    
+    },
     
 }));
+
+export default store;

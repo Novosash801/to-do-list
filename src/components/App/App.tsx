@@ -1,26 +1,37 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
-import { store } from '../../utils/store';
+import store  from '../../utils/store';
 
-import style from './app.module.scss';
+import styles from './app.module.scss';
+import InputPlus from '../InputPlus/InputPlus';
 
 const App: React.FC = () => {
 
-    const [tasks, addTask, updateTask, removeTask] = store(state=> [
-        state.tasks,
-        state.addTask,
-        state.updateTask,
-        state.removeTask,
-    ]);
-
-    addTask('Learn TS');
+    const [tasks, addTask, updateTask, removeTask] = store(state => 
+        [
+            state.tasks,
+            state.addTask,
+            state.updateTask,
+            state.removeTask,
+        ]);
+    
+    console.log(tasks);
 
     return (
         <>
-            <article className={style.article}>
-                <h1 className={style.title}>To Do App</h1>
-                <section className={style.section}></section>
-                <section className={style.section}></section>
+            <article className={styles.article}>
+                <h1 className={styles.title}>To Do App</h1>
+                <section className={styles.section}>
+                    <InputPlus onAdd={(title) => {
+                        if (title) {
+                            addTask(title);
+                        
+                        }
+                    }}/>
+                </section>
+                <section className={styles.section}>
+                    
+                </section>
             </article>
         </>
     );
