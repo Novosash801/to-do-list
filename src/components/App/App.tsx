@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import store from '../../utils/store';
 
@@ -9,21 +10,27 @@ import InputTask from '../InputTask/InputTask';
 import { FavoriteTasks } from '../FavoriteTasks/FavoriteTasks';
 
 const App: React.FC = () => {
-    const [filter, setFilter] = useState<'All' | 'Completed' | 'Incompleted' | 'Favorite'>('All');
-    const [tasks, addTask, updateTask, removeTask, updateTaskCategory, loadTasksFromServer] = store(state => [
+    // const [filter, setFilter] = useState<'All' | 'Completed' | 'Incompleted' | 'Favorite'>('All');
+    const [tasks, addTask, updateTask, removeTask, filterTasks , updateTaskCategory, setFilter] = store(state => [
         state.tasks,
         state.addTask,
         state.updateTask,
         state.removeTask,
+        state.filterTasks,
         state.updateTaskCategory,
-        state.loadTasksFromServer
+        state.setFilter,
     ]);
 
-    useEffect(() => {
-        loadTasksFromServer();
-    }, [loadTasksFromServer]);
+    const filteredTasks = filterTasks();
 
-    // const filteredTasks = filter === 'All' ? tasks : tasks.filter(task => task.category === filter);
+    useEffect(() => {
+        store.getState().loadTasksFromServer();
+    }, []);
+
+    const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        setFilter(event.target.value as 'All' | 'Completed' | 'Incompleted' | 'Favorite');
+    };
+
 
     return (
         <>
@@ -33,10 +40,7 @@ const App: React.FC = () => {
                 <section className={styles.articleSection}>
                     <select
                         className={styles.articleSectionSelect}
-                        // onChange={e =>
-                        //     setFilter(
-                        //         e.target.value as 'All' | 'Completed' | 'Incompleted' | 'Favorite',
-                        //     )}
+                        onChange={handleCategoryChange}
                     >
                         <option value='All'>Все</option>
                         <option value='Completed'>Выполненные</option>
@@ -53,13 +57,13 @@ const App: React.FC = () => {
                 </section>
 
                 <section>
-                    {(!tasks.length && (
+                    {(!filteredTasks.length && (
                         <p className={styles.articleNoTasks}>No tasks here... 😴</p>
                     )) ||
-                        (tasks.length > 0 && (
+                        (filteredTasks.length > 0 && (
                             <p className={styles.articleActiveTasks}>Active Tasks 🗃️:</p>
                         ))}
-                    {tasks.map(task => (
+                    {filteredTasks.map(task => (
                         <InputTask
                             key={task.id}
                             id={task.id}

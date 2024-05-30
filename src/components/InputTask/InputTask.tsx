@@ -20,9 +20,16 @@ interface InputTaskProps {
     ) => void;
 }
 
-const InputTask: React.FC<InputTaskProps> = ({id, title, onEdited, onRemoved, category, onCategoryChange}) => {
-    const [checked, setChecked] = useState(category === 'Completed');
+const InputTask: React.FC<InputTaskProps> = ({
+    id,
+    title,
+    onEdited,
+    onRemoved,
+    category,
+    onCategoryChange,
+}) => {
     const [isEditMode, setIsEditMode] = useState(false);
+    const [onFavorited, setIsFavorited] = useState(false);
     const [value, setValue] = useState(title);
     const editTitleInputRef = useRef<HTMLInputElement>(null); // для фокуса после edit таски
 
@@ -38,11 +45,11 @@ const InputTask: React.FC<InputTaskProps> = ({id, title, onEdited, onRemoved, ca
                 <input
                     type='checkbox'
                     disabled={isEditMode}
-                    checked={checked}
+                    checked={category === 'Completed'}
                     className={styles.inputTaskCheckbox}
                     onChange={e => {
-                        setChecked(e.target.checked);
-                        onCategoryChange(id, e.target.checked ? 'Completed' : 'Incompleted');
+                        const newCategory = e.target.checked ? 'Completed' : 'Incompleted';
+                        onCategoryChange(id, newCategory);
                     }}
                 />
 

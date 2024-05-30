@@ -6,25 +6,23 @@ interface Task {
     id: string;
     title: string;
     description: string;
-    status: 'completed' | 'active';
     createdAt: Date;
     updatedAt: Date;
     publishedAt: Date;
+    status: 'completed' | 'active';
     category: 'All' | 'Completed' | 'Incompleted' | 'Favorite';
-}
-
-interface FilterFunction {
-    (task: Task): boolean;
 }
 
 interface ToDoStore {
     tasks: Task[];
     favoriteTasks: Task[];
+    currentFilter: Task['category'];
     addTask: (title: string) => void;
     updateTask: (id: string, title: string) => void;
+    filterTasks: () => Task[];
     removeTask: (id: string) => void;
-    filterTasks: (filter: FilterFunction) => Task[];
     updateTaskCategory: (id: string, category: Task['category']) => void;
+    setFilter: (filter: Task['category']) => void;
     loadFavoriteTasks: () => void;
     loadTasksFromServer: () => Promise<void>;
    
@@ -36,6 +34,7 @@ const store = create<ToDoStore>()(
         (set, get) => ({
             tasks: [],
             favoriteTasks: JSON.parse(localStorage.getItem('favoriteTasks') || '[]'),
+            currentFilter: 'All',
 
             addTask: title => {
                 const { tasks } = get();
@@ -43,10 +42,10 @@ const store = create<ToDoStore>()(
                     title,
                     id: generatedId(),
                     description: '',
-                    status: 'active',
+                    createdAt: new Date(),
                     updatedAt: new Date(),
                     publishedAt: new Date(),
-                    createdAt: new Date(),
+                    status: 'active',
                     category: 'Incompleted', // Устанавливаем категорию по умолчанию
                 };
 
@@ -77,9 +76,10 @@ const store = create<ToDoStore>()(
                 set({ tasks: updatedTasks });
             },
 
-            filterTasks: filter => {
-                const { tasks } = get();
-                return tasks.filter(filter);
+            filterTasks: () => {
+                const { tasks, currentFilter } = get();
+                if (currentFilter === 'All') return tasks;
+                return tasks.filter(task => task.category === currentFilter);
             },
 
             updateTaskCategory: (id: string, category: Task['category']) => {
@@ -113,6 +113,10 @@ const store = create<ToDoStore>()(
                 set({ tasks: updatedTasks });
             },
 
+            setFilter: (filter: Task['category']) => {
+                set({ currentFilter: filter });
+            },
+
             loadTasksFromServer: async () => {
                 const response = await fetch('https://cms.dev-land.host/api/tasks');
                 const jsonData = await response.json();
@@ -121,9 +125,6 @@ const store = create<ToDoStore>()(
                     title: item.attributes.title,
                     description: item.attributes.description,
                     status: item.attributes.status,
-                    createdAt: new Date(item.attributes.createdAt),
-                    updatedAt: new Date(item.attributes.updatedAt),
-                    publishedAt: new Date(item.attributes.publishedAt),
                     category: item.attributes.status === 'completed' ? 'Completed' : 'Incompleted',
                 }));
     
