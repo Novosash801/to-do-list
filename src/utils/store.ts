@@ -6,7 +6,11 @@ import generatedId from './helpers';
 interface Task {
     id: string;
     title: string;
+    description: string;
+    status: 'completed' | 'active';
     createdAt: Date;
+    updatedAt: Date;
+    publishedAt: Date;
     category: 'All' | 'Completed' | 'Incompleted' | 'Favorite';
 }
 
@@ -16,6 +20,7 @@ interface FilterFunction {
 
 interface ToDoStore {
     tasks: Task[];
+    favoriteTasks: Task[];
     addTask: (title: string) => void;
     updateTask: (id: string, title: string) => void;
     removeTask: (id: string) => void;
@@ -23,7 +28,8 @@ interface ToDoStore {
     updateTaskCategory: (id: string, category: Task['category']) => void;
     saveFavoriteTasks: () => void;
     loadFavoriteTasks: () => void;
-    favoriteTasks: Task[];
+    loadTasksFromJSON: (jsonData: any) => void;
+   
 }
 
 const store = create<ToDoStore>()(
@@ -36,8 +42,12 @@ const store = create<ToDoStore>()(
             addTask: title => {
                 const { tasks } = get();
                 const newTask: Task = {
-                    id: generatedId(),
                     title,
+                    id: generatedId(),
+                    description: '',
+                    status: 'active',
+                    updatedAt: new Date(),
+                    publishedAt: new Date(),
                     createdAt: new Date(),
                     category: 'Incompleted', // Устанавливаем категорию по умолчанию
                 };
@@ -53,7 +63,7 @@ const store = create<ToDoStore>()(
                     if (task.id === id) {
                         return {
                             ...task,
-                            title: task.id === id ? title : task.title,
+                            title
                         };
                     }
                     return task;
@@ -103,6 +113,21 @@ const store = create<ToDoStore>()(
                 });
 
                 set({ tasks: updatedTasks });
+            },
+
+            loadTasksFromJSON: (jsonData: { data: any[]; }) => {
+                const tasks = jsonData.data.map((item: any) => ({
+                    id: item.id.toString(),
+                    title: item.attributes.title,
+                    description: item.attributes.description,
+                    status: item.attributes.status,
+                    createdAt: new Date(item.attributes.createdAt),
+                    updatedAt: new Date(item.attributes.updatedAt),
+                    publishedAt: new Date(item.attributes.publishedAt),
+                    category: item.attributes.status === 'completed' ? 'Completed' : 'Incompleted',
+                }));
+    
+                set({ tasks });
             },
 
             loadFavoriteTasks: () => {

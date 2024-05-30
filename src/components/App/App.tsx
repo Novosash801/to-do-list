@@ -5,24 +5,57 @@ import store from '../../utils/store';
 import styles from './app.module.scss';
 import InputPlus from '../InputPlus/InputPlus';
 import InputTask from '../InputTask/InputTask';
+
 import { FavoriteTasks } from '../FavoriteTasks/FavoriteTasks';
 
 const App: React.FC = () => {
-    
-    fetch('https://cms.dev-land.host/api/tasks')
-        .then(res => {
-            return res.json();
-        })
-        .then(res => console.log('Массив', res));
-
     const [filter, setFilter] = useState<'All' | 'Completed' | 'Incompleted' | 'Favorite'>('All');
-    const [tasks, addTask, updateTask, removeTask, updateTaskCategory] = store(state => [
+    const [tasks, addTask, updateTask, removeTask, updateTaskCategory, loadTasksFromJSON] = store(state => [
         state.tasks,
         state.addTask,
         state.updateTask,
         state.removeTask,
         state.updateTaskCategory,
+        state.loadTasksFromJSON
     ]);
+
+    useEffect(() => {
+        const jsonData = {
+            data: [
+                {
+                    id: 44,
+                    attributes: {
+                        title: 'Уже сделано',
+                        description: 'Парампампам',
+                        status: 'completed',
+                        createdAt: '2024-05-26T20:24:33.499Z',
+                        updatedAt: '2024-05-28T04:21:14.814Z',
+                        publishedAt: '2024-05-26T20:24:33.498Z',
+                    },
+                },
+                {
+                    id: 74,
+                    attributes: {
+                        title: 'Сделать что-то',
+                        description: 'Парампампам',
+                        status: 'active',
+                        createdAt: '2024-05-27T15:33:45.227Z',
+                        updatedAt: '2024-05-28T09:42:36.809Z',
+                        publishedAt: '2024-05-27T15:33:45.227Z',
+                    },
+                },
+            ],
+            meta: {
+                pagination: {
+                    page: 1,
+                    pageSize: 25,
+                    pageCount: 1,
+                    total: 2,
+                },
+            },
+        };
+        loadTasksFromJSON(jsonData);
+    }, [loadTasksFromJSON]);
 
     const filteredTasks = filter === 'All' ? tasks : tasks.filter(task => task.category === filter);
 
@@ -52,15 +85,15 @@ const App: React.FC = () => {
                         }}
                     />
                 </section>
-                {/* <hr /> */}
+
                 <section>
-                    {(!filteredTasks.length && (
+                    {(!tasks.length && (
                         <p className={styles.articleNoTasks}>No tasks here... 😴</p>
                     )) ||
-                        (filteredTasks.length > 0 && (
+                        (tasks.length > 0 && (
                             <p className={styles.articleActiveTasks}>Active Tasks 🗃️:</p>
                         ))}
-                    {filteredTasks.map(task => (
+                    {tasks.map(task => (
                         <InputTask
                             key={task.id}
                             id={task.id}
