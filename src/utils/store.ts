@@ -6,9 +6,6 @@ interface Task {
     id: string;
     title: string;
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
-    publishedAt: Date;
     status: 'completed' | 'active';
     category: 'All' | 'Completed' | 'Incompleted' | 'Favorite';
 }
@@ -25,6 +22,8 @@ interface ToDoStore {
     setFilter: (filter: Task['category']) => void;
     loadFavoriteTasks: () => void;
     loadTasksFromServer: () => Promise<void>;
+    loadMoreTasksFromServer: () => Promise<void>;
+    hasMore: boolean; // для отслеживания наличия дополнительных задач
    
 }
 
@@ -35,6 +34,7 @@ const store = create<ToDoStore>()(
             tasks: [],
             favoriteTasks: JSON.parse(localStorage.getItem('favoriteTasks') || '[]'),
             currentFilter: 'All',
+            hasMore: true,
 
             addTask: title => {
                 const { tasks } = get();
@@ -42,9 +42,6 @@ const store = create<ToDoStore>()(
                     title,
                     id: generatedId(),
                     description: '',
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                    publishedAt: new Date(),
                     status: 'active',
                     category: 'Incompleted', // Устанавливаем категорию по умолчанию
                 };
@@ -136,6 +133,25 @@ const store = create<ToDoStore>()(
                 set({ favoriteTasks });
             },
 
+            loadMoreTasksFromServer: async () => {
+                const { tasks } = get();
+                const limit = 5;
+                const response = await fetch(`https://cms.dev-land.host/api/tasks?start=${tasks.length}&limit=${limit}`);
+                const jsonData = await response.json();
+                const newTasks = jsonData.data.map((item: any) => ({
+                    id: item.id.toString(),
+                    title: item.attributes.title,
+                    description: item.attributes.description,
+                    status: item.attributes.status,
+                    category: item.attributes.status === 'completed' ? 'Completed' : 'Incompleted',
+                }));
+
+                if (newTasks.length < 10) {
+                    set({ hasMore: false });
+                }
+
+                set({ tasks: [...tasks, ...newTasks] });
+            },
         }),
     ),
 );

@@ -10,7 +10,6 @@ import InputTask from '../InputTask/InputTask';
 import { FavoriteTasks } from '../FavoriteTasks/FavoriteTasks';
 
 const App: React.FC = () => {
-    // const [filter, setFilter] = useState<'All' | 'Completed' | 'Incompleted' | 'Favorite'>('All');
     const [tasks, addTask, updateTask, removeTask, filterTasks , updateTaskCategory, setFilter] = store(state => [
         state.tasks,
         state.addTask,
