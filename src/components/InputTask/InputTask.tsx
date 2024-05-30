@@ -20,7 +20,6 @@ interface InputTaskProps {
 const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRemoved, category, onCategoryChange }) => {
     
     const [checked, setChecked] = useState(category === 'Completed');
-    const [favorite, setFavorite] = useState(category === 'Favorite');
     const [isEditMode, setIsEditMode] = useState(false);
     const [value, setValue] = useState(title);
     const editTitleInputRef = useRef<HTMLInputElement>(null); // для фокуса после edit таски
@@ -30,10 +29,6 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
             editTitleInputRef?.current?.focus();
         }
     }, [isEditMode]);
-
-    useEffect(() => {
-        setChecked(category === 'Completed');
-    }, [category]);
 
     return (
         <div className={styles.inputTask}>
@@ -45,14 +40,8 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                     checked={checked}
                     className={styles.inputTaskCheckbox}
                     onChange={e => {
-                        const isChecked = e.target.checked;
-                        setChecked(isChecked);
-                        onCategoryChange(id, isChecked ? 'Completed' : 'Incompleted');
-                        if (e.target.checked) {
-                            setTimeout(()  =>  {
-                                // onDone(id);
-                            }, 100);
-                        }
+                        setChecked(e.target.checked);
+                        onCategoryChange(id, e.target.checked ? 'Completed' : 'Incompleted');
                     }}
                 />
 
@@ -70,7 +59,7 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                         className={styles.inputTaskTitleEdit}
                     />
                 ) : (
-                    <h3 className={styles.inputTaskTitle}>{title}</h3>
+                    <p className={styles.inputTaskTitle}>{title}</p>
                 )}
             </label>
             
@@ -96,36 +85,26 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                     <img src={editSvg} alt='edit button' />
                 </button>
             )}
-            <button
-                className={styles.inputTaskFavorite}
-                aria-label='Favorite'
-                onClick={() => {
-                    setFavorite(!favorite);
-                    onCategoryChange(id, favorite ? 'All' : 'Favorite');
-                
-
-                }}>
-                <img src={starSvg} alt='favorite button' />
-            </button>
+            
             <button
                 aria-label='Remove'
                 onClick={() => {
-                    window.confirm('Are you sure?') && onRemoved(id);
+                    window.confirm('Вы уверены?') && onRemoved(id);
                 }}
                 className={styles.inputTaskRemove}>
                 <img src={removeSvg} alt='remove button' />
             </button>
             
+            <button
+                className={styles.inputTaskFavorite}
+                aria-label='Favorite'
+                onClick={() => {
+                    onCategoryChange(id, category === 'Favorite' ? 'Incompleted' : 'Favorite');
+                
+                }}>
+                <img src={starSvg} alt='favorite button' />
+            </button>
 
-            <select
-                value={category}
-                onChange={(e) => onCategoryChange(id, e.target.value as 'All' | 'Completed' | 'Incompleted' | 'Favorite')}
-                className={styles.inputTaskCategory}
-            >
-                <option value='Incompleted'>Невыполненные</option>
-                <option value='Completed'>Выполненные</option>
-                <option value='Favorite'>Избранные</option>
-            </select>
         </div>
     );
 };

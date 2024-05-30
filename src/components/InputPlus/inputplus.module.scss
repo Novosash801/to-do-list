@@ -1,29 +1,30 @@
 .inputPlus {
+    width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr 2fr;
-    margin-bottom: 15px;
-}
-
-.inputPlusValue {
-    min-width: 500px;
-    color: #000000;
-    background: #DBE2EF ;
-    border: 1px solid #b1b1b1;
-    padding: 10px;
-    font-size: 20px ;
-    font-weight: 300;
-}
-
-.inputPlusButton {
-    height: 100%;
-    border: none;
-    border-radius: 0;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-    cursor: pointer;
-    background: #3f72af;
-    &:hover {
-        opacity: 0.7;
-        transition: 0.8s all;
+    grid-template-columns: 1fr 60px;
+    // margin-bottom: 15px;
+    &Value {
+        min-width: 500px;
+        color: #000000;
+        background: #dbe2ef;
+        border: 1px solid #b1b1b1;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        padding: 10px;
+        font-size: 20px;
     }
-} 
+
+    &Button {
+        height: 100%;
+        border: none;
+        border-radius: 0;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        cursor: pointer;
+        background: #3f72af;
+        &:hover {
+            opacity: 0.7;
+            transition: 0.8s all;
+        }
+    }
+}

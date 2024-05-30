@@ -3,35 +3,42 @@
     grid-template-columns: 1fr 50px 50px 50px;
     // gap: 10px;
     margin-bottom: 15px;
-    background: #DBE2EF;
+    background: #dbe2ef;
     border-radius: 5px;
     padding-right: 10px;
-    .inputTaskLabel {
+    &Label {
         display: grid;
-        grid-template-columns: 80px 1fr 1fr 1fr;
-        align-items: center;
+        grid-template-columns: auto 1fr;
+        // align-items: center;
         padding: 12px 15px;
         cursor: pointer;
-        .inputTaskCheckbox {
-            width: 20px;
-            height: 20px;
-            margin-right: 10px;
-            cursor: pointer;
-        }
-        .inputTaskTitle {
-            padding: 5px
-        }
-        .inputTaskTitleEdit {
-            font-size: 18px;
-            border: none;
-            padding: 5px;
-            background: none;
-            box-shadow: 0 4px 0 -3px #3f72af;
-            box-shadow: 0 4px 0 -3px #3faf64;
-
-        }
     }
-    .inputTaskEdit, .inputTaskRemove, .inputTaskSave, .inputTaskFavorite {
+
+    &Checkbox {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+
+    &Title {
+        padding: 5px;
+        font-size: 16px;
+        line-height: 1.5vh;
+    }
+
+    &TitleEdit {
+        font-size: 18px;
+        border: none;
+        padding: 5px;
+        background: none;
+        box-shadow: 0 4px 0 -3px #3faf64;
+    }
+
+    &Edit,
+    &Remove,
+    &Save,
+    &Favorite {
         display: block;
         height: 100%;
         border: none;
@@ -45,7 +52,12 @@
     }
 
     .inputTaskCategory {
-        width: 100px;
+        width: 140px;
+        height: 20px;
+        font-size: 15px;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba($color: #8e8ea109, $alpha: 0.5);
     }
-    
 }

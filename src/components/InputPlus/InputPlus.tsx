@@ -16,7 +16,7 @@ const InputPlus: React.FC<InputPlusProps> = ({ onAdd }) => {
     const addTask = useCallback(() => {
         onAdd(inputValue);
         setInputValue('');
-    }, [inputValue, onAdd]);
+    }, [inputValue]);
 
     return (
         <div className={styles.inputPlus}>

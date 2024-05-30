@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
-import { useStore } from 'zustand';
+import React, { useEffect, useState } from 'react';
 
 import store from '../../utils/store';
 
 import styles from './app.module.scss';
 import InputPlus from '../InputPlus/InputPlus';
 import InputTask from '../InputTask/InputTask';
+import { FavoriteTasks } from '../FavoriteTasks/FavoriteTasks';
 
 const App: React.FC = () => {
+    
+    fetch('https://cms.dev-land.host/api/tasks')
+        .then(res => {
+            return res.json();
+        })
+        .then(res => console.log('Массив', res));
+
     const [filter, setFilter] = useState<'All' | 'Completed' | 'Incompleted' | 'Favorite'>('All');
     const [tasks, addTask, updateTask, removeTask, updateTaskCategory] = store(state => [
         state.tasks,
@@ -22,8 +29,8 @@ const App: React.FC = () => {
     return (
         <>
             <article className={styles.article}>
-                <h1 className={styles.articleTitle}>To Do App 🗓️</h1>
-                
+                <h1 className={styles.articleTitle}>🗓️ To Do App 🗓️</h1>
+
                 <section className={styles.articleSection}>
                     <select
                         className={styles.articleSectionSelect}
@@ -45,7 +52,8 @@ const App: React.FC = () => {
                         }}
                     />
                 </section>
-                <section className={styles.taskSection}>
+                {/* <hr /> */}
+                <section>
                     {(!filteredTasks.length && (
                         <p className={styles.articleNoTasks}>No tasks here... 😴</p>
                     )) ||
@@ -66,6 +74,7 @@ const App: React.FC = () => {
                     ))}
                 </section>
             </article>
+            <FavoriteTasks />
         </>
     );
 };
