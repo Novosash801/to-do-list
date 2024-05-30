@@ -10,54 +10,20 @@ import { FavoriteTasks } from '../FavoriteTasks/FavoriteTasks';
 
 const App: React.FC = () => {
     const [filter, setFilter] = useState<'All' | 'Completed' | 'Incompleted' | 'Favorite'>('All');
-    const [tasks, addTask, updateTask, removeTask, updateTaskCategory, loadTasksFromJSON] = store(state => [
+    const [tasks, addTask, updateTask, removeTask, updateTaskCategory, loadTasksFromServer] = store(state => [
         state.tasks,
         state.addTask,
         state.updateTask,
         state.removeTask,
         state.updateTaskCategory,
-        state.loadTasksFromJSON
+        state.loadTasksFromServer
     ]);
 
     useEffect(() => {
-        const jsonData = {
-            data: [
-                {
-                    id: 44,
-                    attributes: {
-                        title: 'Уже сделано',
-                        description: 'Парампампам',
-                        status: 'completed',
-                        createdAt: '2024-05-26T20:24:33.499Z',
-                        updatedAt: '2024-05-28T04:21:14.814Z',
-                        publishedAt: '2024-05-26T20:24:33.498Z',
-                    },
-                },
-                {
-                    id: 74,
-                    attributes: {
-                        title: 'Сделать что-то',
-                        description: 'Парампампам',
-                        status: 'active',
-                        createdAt: '2024-05-27T15:33:45.227Z',
-                        updatedAt: '2024-05-28T09:42:36.809Z',
-                        publishedAt: '2024-05-27T15:33:45.227Z',
-                    },
-                },
-            ],
-            meta: {
-                pagination: {
-                    page: 1,
-                    pageSize: 25,
-                    pageCount: 1,
-                    total: 2,
-                },
-            },
-        };
-        loadTasksFromJSON(jsonData);
-    }, [loadTasksFromJSON]);
+        loadTasksFromServer();
+    }, [loadTasksFromServer]);
 
-    const filteredTasks = filter === 'All' ? tasks : tasks.filter(task => task.category === filter);
+    // const filteredTasks = filter === 'All' ? tasks : tasks.filter(task => task.category === filter);
 
     return (
         <>
@@ -67,11 +33,11 @@ const App: React.FC = () => {
                 <section className={styles.articleSection}>
                     <select
                         className={styles.articleSectionSelect}
-                        onChange={e =>
-                            setFilter(
-                                e.target.value as 'All' | 'Completed' | 'Incompleted' | 'Favorite',
-                            )
-                        }>
+                        // onChange={e =>
+                        //     setFilter(
+                        //         e.target.value as 'All' | 'Completed' | 'Incompleted' | 'Favorite',
+                        //     )}
+                    >
                         <option value='All'>Все</option>
                         <option value='Completed'>Выполненные</option>
                         <option value='Incompleted'>Невыполненные</option>

@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
-// import { persist, createJSONStorage } from 'zustand/middleware';
 
 import generatedId from './helpers';
 interface Task {
@@ -26,9 +25,8 @@ interface ToDoStore {
     removeTask: (id: string) => void;
     filterTasks: (filter: FilterFunction) => Task[];
     updateTaskCategory: (id: string, category: Task['category']) => void;
-    saveFavoriteTasks: () => void;
     loadFavoriteTasks: () => void;
-    loadTasksFromJSON: (jsonData: any) => void;
+    loadTasksFromServer: () => Promise<void>;
    
 }
 
@@ -63,7 +61,7 @@ const store = create<ToDoStore>()(
                     if (task.id === id) {
                         return {
                             ...task,
-                            title
+                            title,
                         };
                     }
                     return task;
@@ -115,7 +113,9 @@ const store = create<ToDoStore>()(
                 set({ tasks: updatedTasks });
             },
 
-            loadTasksFromJSON: (jsonData: { data: any[]; }) => {
+            loadTasksFromServer: async () => {
+                const response = await fetch('https://cms.dev-land.host/api/tasks');
+                const jsonData = await response.json();
                 const tasks = jsonData.data.map((item: any) => ({
                     id: item.id.toString(),
                     title: item.attributes.title,
@@ -129,19 +129,14 @@ const store = create<ToDoStore>()(
     
                 set({ tasks });
             },
-
+    
             loadFavoriteTasks: () => {
                 const favoriteTasks = JSON.parse(localStorage.getItem('favoriteTasks') || '[]');
                 set({ favoriteTasks });
             },
 
-            saveFavoriteTasks: () => {
-                const { favoriteTasks } = get();
-                localStorage.setItem('favoriteTasks', JSON.stringify(favoriteTasks));
-            },
         }),
     ),
-    // ),
 );
 
 export default store;
