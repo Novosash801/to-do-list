@@ -135,7 +135,7 @@ const store = create<ToDoStore>()(
 
             loadMoreTasksFromServer: async () => {
                 const { tasks } = get();
-                const limit = 5;
+                const limit = 10;
                 const response = await fetch(`https://cms.dev-land.host/api/tasks?start=${tasks.length}&limit=${limit}`);
                 const jsonData = await response.json();
                 const newTasks = jsonData.data.map((item: any) => ({
