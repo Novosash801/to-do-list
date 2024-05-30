@@ -1,16 +1,31 @@
-.article {
-    min-width: 800px;
+.article { 
+    min-width: 600px;
     background: #ffffff;
     border-radius: 20px;
-    padding: 20px 60px 30px;
-    .title {
+    padding: 20px 60px;
+    &Title {
         padding: 20px;
         font-size: 30px;
         font-weight: 400;
         text-align: center;
     }
+    .articleSectionSelect {
+        width: 100px;
+        height: 25px;
+        font-size: 15px;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba($color: #8e8ea109, $alpha: 0.5);
+        }
 
-    .articleText {
+    .articleNoTasks {
+        padding-top: 10px;
+        font-size: 20px;
+        text-align: center;
+    }
+    .articleActiveTasks {
+        margin: 20px 20px;
         font-size: 20px;
         text-align: center;
     }

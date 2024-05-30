@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import styles from './inputtask.module.scss';
+import styles from './inputTask.module.scss';
 
 import editSvg from '../../assets/icons/edit.svg';
 import removeSvg from '../../assets/icons/trash.svg';
 import checkSvg from '../../assets/icons/check.svg';
+import starSvg from '../../assets/icons/star.svg';
 
 interface InputTaskProps {
     id: string;
@@ -12,11 +13,14 @@ interface InputTaskProps {
     onDone: (id: string) => void;
     onEdited: (id: string, title: string) => void;
     onRemoved: (id: string) => void;
+    category: 'All' | 'Completed' | 'Incompleted' | 'Favorite';
+    onCategoryChange: (id: string, category: 'All' | 'Completed' | 'Incompleted' | 'Favorite') => void;
 }
 
-const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRemoved }) => {
+const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRemoved, category, onCategoryChange }) => {
     
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(category === 'Completed');
+    const [favorite, setFavorite] = useState(category === 'Favorite');
     const [isEditMode, setIsEditMode] = useState(false);
     const [value, setValue] = useState(title);
     const editTitleInputRef = useRef<HTMLInputElement>(null); // для фокуса после edit таски
@@ -27,8 +31,13 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
         }
     }, [isEditMode]);
 
+    useEffect(() => {
+        setChecked(category === 'Completed');
+    }, [category]);
+
     return (
         <div className={styles.inputTask}>
+            
             <label className={styles.inputTaskLabel}>
                 <input
                     type='checkbox'
@@ -36,9 +45,13 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                     checked={checked}
                     className={styles.inputTaskCheckbox}
                     onChange={e => {
-                        setChecked(e.target.checked);
+                        const isChecked = e.target.checked;
+                        setChecked(isChecked);
+                        onCategoryChange(id, isChecked ? 'Completed' : 'Incompleted');
                         if (e.target.checked) {
-                            onDone(id);
+                            setTimeout(()  =>  {
+                                // onDone(id);
+                            }, 100);
                         }
                     }}
                 />
@@ -60,6 +73,7 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                     <h3 className={styles.inputTaskTitle}>{title}</h3>
                 )}
             </label>
+            
             {isEditMode ? (
                 <button 
                     className={styles.inputTaskSave}
@@ -82,7 +96,17 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                     <img src={editSvg} alt='edit button' />
                 </button>
             )}
+            <button
+                className={styles.inputTaskFavorite}
+                aria-label='Favorite'
+                onClick={() => {
+                    setFavorite(!favorite);
+                    onCategoryChange(id, favorite ? 'All' : 'Favorite');
+                
 
+                }}>
+                <img src={starSvg} alt='favorite button' />
+            </button>
             <button
                 aria-label='Remove'
                 onClick={() => {
@@ -91,6 +115,17 @@ const InputTask: React.FC<InputTaskProps> = ({ id, title, onDone, onEdited, onRe
                 className={styles.inputTaskRemove}>
                 <img src={removeSvg} alt='remove button' />
             </button>
+            
+
+            <select
+                value={category}
+                onChange={(e) => onCategoryChange(id, e.target.value as 'All' | 'Completed' | 'Incompleted' | 'Favorite')}
+                className={styles.inputTaskCategory}
+            >
+                <option value='Incompleted'>Невыполненные</option>
+                <option value='Completed'>Выполненные</option>
+                <option value='Favorite'>Избранные</option>
+            </select>
         </div>
     );
 };

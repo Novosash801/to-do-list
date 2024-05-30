@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import styles from './inputplus.module.scss';
+import { create } from 'zustand';
+
+import styles from './inputPlus.module.scss';
 
 import plusSvg from '../../assets/icons/plus.svg';
+
 
 interface InputPlusProps {
     onAdd: (title: string) => void;
 }
 
-const InputPlus: React.FC<InputPlusProps> = ({
-    onAdd, 
-}) => {
-
+const InputPlus: React.FC<InputPlusProps> = ({ onAdd }) => {
     const [inputValue, setInputValue] = useState('');
     const addTask = useCallback(() => {
         onAdd(inputValue);
@@ -20,23 +20,20 @@ const InputPlus: React.FC<InputPlusProps> = ({
 
     return (
         <div className={styles.inputPlus}>
-            <input 
+            <input
                 type='text'
-                className={styles.inputPlusValue} 
+                className={styles.inputPlusValue}
                 value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
+                onChange={e => setInputValue(e.target.value)}
                 placeholder='Введите текст...'
-                onKeyDown={(e) => {
+                onKeyDown={e => {
                     if (e.key === 'Enter') {
                         addTask();
                     }
                 }}
             />
-            <button
-                onClick={addTask}
-                aria-label='Add'
-                className={styles.inputPlusButton}>
-                <img src={plusSvg} alt="input button"/>    
+            <button onClick={addTask} aria-label='Add' className={styles.inputPlusButton}>
+                <img src={plusSvg} alt='input button' />
             </button>
         </div>
     );
