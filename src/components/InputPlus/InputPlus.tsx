@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { create } from 'zustand';
 
-import styles from './Plus.module.scss';
+import styles from './plus.module.scss';
 
 import plusSvg from '../../assets/icons/plus.svg';
 
