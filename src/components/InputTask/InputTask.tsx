@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import styles from './inputTask.module.scss';
+import styles from './task.module.scss';
 
 import editSvg from '../../assets/icons/edit.svg';
 import removeSvg from '../../assets/icons/trash.svg';
