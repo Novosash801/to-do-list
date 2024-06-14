@@ -1,10 +1,5 @@
 # 🗓️ To - do List 🗓️
 
-Тестовое для компании <img src="./public/readmeIcons/sputnic.svg" title="Sputnic" alt="Sputnic" width="40" height="40"/>: &nbsp;<br/>
-Реализовать Todo List, используя данную апи: 
-https://cms.dev-land.host/api
-
-
 ## Используемый стек:
 React ![image](./public/readmeIcons/react-original.svg)  
 TypeScript ![image](./public/readmeIcons/typescript-plain.svg)  
